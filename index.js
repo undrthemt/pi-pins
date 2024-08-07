@@ -10,16 +10,17 @@ var fs = require('fs'),
 /*
 var pin1 = require("./gpio").connect(17),
     pin2 = require("./gpio").connect(22);
+    pin2 = require("./gpio").connect(22, 'gpiochip');
 pin2.mode('in');
 pin1.mode('high'); pin2.value();
 pin1.mode('low'); pin2.value();
 */
 
-exports.connect = function (pin) {        // TODO: sync up compat, split out
+exports.connect = function (pin, pinPrefix = 'gpio') {        // TODO: sync up compat, split out
     pin = +pin;
     
     var fd,     // faster value access
-        pinPath = "/sys/class/gpio/gpio"+pin;
+        pinPath = `/sys/class/gpio/${pinPrefix}`+pin;
     try {
         fd = fs.openSync(pinPath+"/value",'r+');
     } catch (e) {
